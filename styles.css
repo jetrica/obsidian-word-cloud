@@ -1,0 +1,27 @@
+.word-cloud-container {
+    position: relative;
+    min-height: 500px;
+    background: var(--background-primary);
+    border-radius: 8px;
+    padding: 20px;
+    overflow: hidden;
+    margin: 1em 0;
+}
+
+.word-cloud-word {
+    position: absolute;
+    white-space: nowrap;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.word-cloud-word:hover {
+    z-index: 100 !important;
+}
+
+/* Modal styling */
+.modal .preview-container {
+    min-height: 500px;
+}
