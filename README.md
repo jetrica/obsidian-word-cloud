@@ -41,7 +41,7 @@ since this plugin is still in development/testing, it hasn't been submitted for 
 
 ### Beta Installation (BRAT)
 1. Install the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat)
-2. Add beta repository: `YourUsername/obsidian-word-cloud`
+2. Add beta repository: `https://github.com/jetrica/obsidian-word-cloud`
 3. BRAT will auto-update when new versions are released
 
 ## Usage
