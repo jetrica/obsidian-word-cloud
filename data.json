@@ -1,0 +1,16 @@
+{
+  "minFontSize": 10,
+  "maxFontSize": 40,
+  "colorPalette": [
+    "#0066cc",
+    "#cc6600",
+    "#cc0066",
+    "#6600cc",
+    "#00cc66"
+  ],
+  "separator": ",",
+  "spacing": "compact",
+  "autoFontSize": true,
+  "autoSpacing": true,
+  "casing": "as-is"
+}
