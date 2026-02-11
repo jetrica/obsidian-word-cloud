@@ -30,8 +30,20 @@ const SPACING_CONFIG = {
     'loose': { padding: 35, margin: 25, startRadius: 20, spiralStep: 10 }
 };
 
-// Auto-calculated spacing based on word count
-function getAutoSpacing(wordCount: number): typeof SPACING_CONFIG['normal'] {
+// Auto-calculated spacing based on word count and screen size
+function getAutoSpacing(wordCount: number, isMobile: boolean = false): typeof SPACING_CONFIG['normal'] {
+    // Mobile gets tighter spacing to fit more words
+    if (isMobile) {
+        if (wordCount <= 10) {
+            return SPACING_CONFIG['comfortable'];
+        } else if (wordCount <= 20) {
+            return SPACING_CONFIG['normal'];
+        } else {
+            return SPACING_CONFIG['compact'];
+        }
+    }
+    
+    // Desktop spacing
     if (wordCount <= 10) {
         return SPACING_CONFIG['loose'];
     } else if (wordCount <= 20) {
@@ -74,8 +86,24 @@ function applyCasing(text: string, casing: 'as-is' | 'uppercase' | 'lowercase' |
     }
 }
 
-// Auto-calculated font sizes based on word count
-function getAutoFontSizes(wordCount: number): { min: number; max: number } {
+// Auto-calculated font sizes based on word count and screen size
+function getAutoFontSizes(wordCount: number, isMobile: boolean = false): { min: number; max: number } {
+    // Mobile gets smaller fonts due to limited screen space (typically 360-430px width)
+    if (isMobile) {
+        if (wordCount <= 10) {
+            return { min: 14, max: 32 };
+        } else if (wordCount <= 20) {
+            return { min: 12, max: 26 };
+        } else if (wordCount <= 40) {
+            return { min: 10, max: 20 };
+        } else if (wordCount <= 70) {
+            return { min: 9, max: 16 };
+        } else {
+            return { min: 8, max: 14 };
+        }
+    }
+    
+    // Desktop font sizes (typically 700+ px width)
     if (wordCount <= 10) {
         return { min: 20, max: 56 };
     } else if (wordCount <= 20) {
@@ -138,27 +166,6 @@ export default class WordCloudPlugin extends Plugin {
             ? this.settings.colorPalette 
             : DEFAULT_SETTINGS.colorPalette;
 
-        // Get font sizes - either auto or manual
-        let minFontSize: number;
-        let maxFontSize: number;
-        if (this.settings.autoFontSize) {
-            const autoSizes = getAutoFontSizes(words.length);
-            minFontSize = autoSizes.min;
-            maxFontSize = autoSizes.max;
-        } else {
-            minFontSize = this.settings.minFontSize;
-            maxFontSize = this.settings.maxFontSize;
-        }
-
-        // Get spacing configuration - either auto or manual
-        let spacingConfig: typeof SPACING_CONFIG['normal'];
-        if (this.settings.autoSpacing) {
-            spacingConfig = getAutoSpacing(words.length);
-        } else {
-            const currentSpacing = this.settings.spacing || 'normal';
-            spacingConfig = SPACING_CONFIG[currentSpacing];
-        }
-
         // Mobile-responsive width detection
         const getContainerWidth = () => {
             if (container.offsetWidth > 0) {
@@ -172,8 +179,32 @@ export default class WordCloudPlugin extends Plugin {
         };
 
         const containerWidth = getContainerWidth();
+        // Detect mobile based on container width
+        const isMobile = containerWidth < 500;
+        
+        // Get font sizes - either auto or manual
+        let minFontSize: number;
+        let maxFontSize: number;
+        if (this.settings.autoFontSize) {
+            const autoSizes = getAutoFontSizes(words.length, isMobile);
+            minFontSize = autoSizes.min;
+            maxFontSize = autoSizes.max;
+        } else {
+            minFontSize = this.settings.minFontSize;
+            maxFontSize = this.settings.maxFontSize;
+        }
+
+        // Get spacing configuration - either auto or manual
+        let spacingConfig: typeof SPACING_CONFIG['normal'];
+        if (this.settings.autoSpacing) {
+            spacingConfig = getAutoSpacing(words.length, isMobile);
+        } else {
+            const currentSpacing = this.settings.spacing || 'normal';
+            spacingConfig = SPACING_CONFIG[currentSpacing];
+        }
+
         // Responsive height - smaller on mobile
-        const containerHeight = containerWidth < 500 ? 400 : 500;
+        const containerHeight = isMobile ? 400 : 500;
         container.style.height = containerHeight + 'px';
         container.style.position = 'relative';
 
@@ -728,12 +759,14 @@ class WordCloudSettingTab extends PluginSettingTab {
             autoInfo.style.fontSize = '0.9em';
             autoInfo.style.lineHeight = '1.6';
             
-            autoInfo.createEl('div', { text: '📐 Auto sizing rules:' }).style.fontWeight = 'bold';
+            autoInfo.createEl('div', { text: '📐 Auto sizing rules (Desktop):' }).style.fontWeight = 'bold';
             autoInfo.createEl('div', { text: '• 1-10 words: 20-56px (big & bold)' });
             autoInfo.createEl('div', { text: '• 11-20 words: 16-40px (balanced)' });
             autoInfo.createEl('div', { text: '• 21-40 words: 14-32px (compact)' });
             autoInfo.createEl('div', { text: '• 41-70 words: 12-28px (dense)' });
             autoInfo.createEl('div', { text: '• 70+ words: 10-22px (very dense)' });
+            autoInfo.createEl('div', { text: '' }); // Spacer
+            autoInfo.createEl('div', { text: '📱 On mobile, font sizes are automatically reduced by ~40% to fit more words on smaller screens.' }).style.fontStyle = 'italic';
         }
 
         // Spacing section header
@@ -776,11 +809,13 @@ class WordCloudSettingTab extends PluginSettingTab {
             autoInfo.style.fontSize = '0.9em';
             autoInfo.style.lineHeight = '1.6';
             
-            autoInfo.createEl('div', { text: '📏 Auto spacing rules:' }).style.fontWeight = 'bold';
+            autoInfo.createEl('div', { text: '📏 Auto spacing rules (Desktop):' }).style.fontWeight = 'bold';
             autoInfo.createEl('div', { text: '• 1-10 words: Loose (spread out nicely)' });
             autoInfo.createEl('div', { text: '• 11-20 words: Comfortable' });
             autoInfo.createEl('div', { text: '• 21-40 words: Normal' });
             autoInfo.createEl('div', { text: '• 40+ words: Compact (fit everything)' });
+            autoInfo.createEl('div', { text: '' }); // Spacer
+            autoInfo.createEl('div', { text: '📱 On mobile, spacing is automatically tighter to maximize word visibility.' }).style.fontStyle = 'italic';
         }
 
         // Color palette section

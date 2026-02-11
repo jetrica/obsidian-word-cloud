@@ -44,7 +44,16 @@ var SPACING_CONFIG = {
   "comfortable": { padding: 22, margin: 18, startRadius: 12, spiralStep: 7 },
   "loose": { padding: 35, margin: 25, startRadius: 20, spiralStep: 10 }
 };
-function getAutoSpacing(wordCount) {
+function getAutoSpacing(wordCount, isMobile = false) {
+  if (isMobile) {
+    if (wordCount <= 10) {
+      return SPACING_CONFIG["comfortable"];
+    } else if (wordCount <= 20) {
+      return SPACING_CONFIG["normal"];
+    } else {
+      return SPACING_CONFIG["compact"];
+    }
+  }
   if (wordCount <= 10) {
     return SPACING_CONFIG["loose"];
   } else if (wordCount <= 20) {
@@ -79,7 +88,20 @@ function applyCasing(text, casing) {
       return text;
   }
 }
-function getAutoFontSizes(wordCount) {
+function getAutoFontSizes(wordCount, isMobile = false) {
+  if (isMobile) {
+    if (wordCount <= 10) {
+      return { min: 14, max: 32 };
+    } else if (wordCount <= 20) {
+      return { min: 12, max: 26 };
+    } else if (wordCount <= 40) {
+      return { min: 10, max: 20 };
+    } else if (wordCount <= 70) {
+      return { min: 9, max: 16 };
+    } else {
+      return { min: 8, max: 14 };
+    }
+  }
   if (wordCount <= 10) {
     return { min: 20, max: 56 };
   } else if (wordCount <= 20) {
@@ -121,23 +143,6 @@ var WordCloudPlugin = class extends import_obsidian.Plugin {
       return;
     }
     const colors = this.settings.colorPalette.length > 0 ? this.settings.colorPalette : DEFAULT_SETTINGS.colorPalette;
-    let minFontSize;
-    let maxFontSize;
-    if (this.settings.autoFontSize) {
-      const autoSizes = getAutoFontSizes(words.length);
-      minFontSize = autoSizes.min;
-      maxFontSize = autoSizes.max;
-    } else {
-      minFontSize = this.settings.minFontSize;
-      maxFontSize = this.settings.maxFontSize;
-    }
-    let spacingConfig;
-    if (this.settings.autoSpacing) {
-      spacingConfig = getAutoSpacing(words.length);
-    } else {
-      const currentSpacing = this.settings.spacing || "normal";
-      spacingConfig = SPACING_CONFIG[currentSpacing];
-    }
     const getContainerWidth = () => {
       if (container.offsetWidth > 0) {
         return container.offsetWidth;
@@ -148,7 +153,25 @@ var WordCloudPlugin = class extends import_obsidian.Plugin {
       return 700;
     };
     const containerWidth = getContainerWidth();
-    const containerHeight = containerWidth < 500 ? 400 : 500;
+    const isMobile = containerWidth < 500;
+    let minFontSize;
+    let maxFontSize;
+    if (this.settings.autoFontSize) {
+      const autoSizes = getAutoFontSizes(words.length, isMobile);
+      minFontSize = autoSizes.min;
+      maxFontSize = autoSizes.max;
+    } else {
+      minFontSize = this.settings.minFontSize;
+      maxFontSize = this.settings.maxFontSize;
+    }
+    let spacingConfig;
+    if (this.settings.autoSpacing) {
+      spacingConfig = getAutoSpacing(words.length, isMobile);
+    } else {
+      const currentSpacing = this.settings.spacing || "normal";
+      spacingConfig = SPACING_CONFIG[currentSpacing];
+    }
+    const containerHeight = isMobile ? 400 : 500;
     container.style.height = containerHeight + "px";
     container.style.position = "relative";
     const renderWords = (centeredWord = null) => {
@@ -531,12 +554,14 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
       autoInfo.style.borderRadius = "4px";
       autoInfo.style.fontSize = "0.9em";
       autoInfo.style.lineHeight = "1.6";
-      autoInfo.createEl("div", { text: "\u{1F4D0} Auto sizing rules:" }).style.fontWeight = "bold";
+      autoInfo.createEl("div", { text: "\u{1F4D0} Auto sizing rules (Desktop):" }).style.fontWeight = "bold";
       autoInfo.createEl("div", { text: "\u2022 1-10 words: 20-56px (big & bold)" });
       autoInfo.createEl("div", { text: "\u2022 11-20 words: 16-40px (balanced)" });
       autoInfo.createEl("div", { text: "\u2022 21-40 words: 14-32px (compact)" });
       autoInfo.createEl("div", { text: "\u2022 41-70 words: 12-28px (dense)" });
       autoInfo.createEl("div", { text: "\u2022 70+ words: 10-22px (very dense)" });
+      autoInfo.createEl("div", { text: "" });
+      autoInfo.createEl("div", { text: "\u{1F4F1} On mobile, font sizes are automatically reduced by ~40% to fit more words on smaller screens." }).style.fontStyle = "italic";
     }
     containerEl.createEl("h3", { text: "Word Spacing" });
     new import_obsidian.Setting(containerEl).setName("Auto spacing").setDesc("Automatically adjust spacing based on word count (recommended)").addToggle((toggle) => toggle.setValue(this.plugin.settings.autoSpacing).onChange(async (value) => {
@@ -557,11 +582,13 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
       autoInfo.style.borderRadius = "4px";
       autoInfo.style.fontSize = "0.9em";
       autoInfo.style.lineHeight = "1.6";
-      autoInfo.createEl("div", { text: "\u{1F4CF} Auto spacing rules:" }).style.fontWeight = "bold";
+      autoInfo.createEl("div", { text: "\u{1F4CF} Auto spacing rules (Desktop):" }).style.fontWeight = "bold";
       autoInfo.createEl("div", { text: "\u2022 1-10 words: Loose (spread out nicely)" });
       autoInfo.createEl("div", { text: "\u2022 11-20 words: Comfortable" });
       autoInfo.createEl("div", { text: "\u2022 21-40 words: Normal" });
       autoInfo.createEl("div", { text: "\u2022 40+ words: Compact (fit everything)" });
+      autoInfo.createEl("div", { text: "" });
+      autoInfo.createEl("div", { text: "\u{1F4F1} On mobile, spacing is automatically tighter to maximize word visibility." }).style.fontStyle = "italic";
     }
     containerEl.createEl("h3", { text: "Color Palette" });
     const colorDesc = containerEl.createEl("p", {

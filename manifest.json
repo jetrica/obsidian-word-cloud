@@ -1,7 +1,7 @@
 {
 	"id": "word-cloud",
 	"name": "Obsidian Word Cloud",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Create word cloud from your words with random sizes, colors, and orientations. Click on word to center it and redistribute others!",
 	"author": "jetrica",
