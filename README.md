@@ -1,4 +1,4 @@
-# Obsidian Word Cloud
+# Word Cloud
 
 Create beautiful, interactive word clouds in Obsidian with random sizes, colors, and orientations. Click on an word to center it and watch the cloud regenerate!
 
