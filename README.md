@@ -1,4 +1,4 @@
-# Word Cloud
+# Word cloud
 
 Create beautiful, interactive word clouds in Obsidian with random sizes, colors, and orientations. Click on an word to center it and watch the cloud regenerate!
 
@@ -20,44 +20,44 @@ Whether you're brainstorming story ideas, organizing research themes, or explori
 
 ## Features
 
-- **Dynamic Visualization** - Words displayed in random colors, sizes, and orientations
+- **Dynamic visualization** - Words displayed in random colors, sizes, and orientations
 - **Interactive** - Click any word to center it and redistribute others around it
-- **Smart Auto-Scaling** - Automatically adjusts font sizes and spacing based on word count
-- **Mobile-Friendly** - Works seamlessly on both desktop and mobile devices
-- **Highly Customizable** - Control colors, fonts, spacing, separators, and text casing
-- **Intelligent Placement** - Advanced spiral algorithm ensures all words fit without overlap
+- **Smart auto-scaling** - Automatically adjusts font sizes and spacing based on word count
+- **Mobile-friendly** - Works seamlessly on both desktop and mobile devices
+- **Highly customizable** - Control colors, fonts, spacing, separators, and text casing
+- **Intelligent placement** - Advanced spiral algorithm ensures all words fit without overlap
 
 ![Example](screens/example.png)
 
 ## Installation
 
-since this plugin is still in development/testing, it hasn't been submitted for approval.
+Plugin is submitted and waiting for approval, but you can try it:
 
-### Manual Installation
-1. Download the latest release from [GitHub Releases](https://github.com/YourUsername/obsidian-word-cloud/releases)
+### Manual installation
+1. Download the latest release from [GitHub releases](https://github.com/jetrica/obsidian-word-cloud/releases)
 2. Extract the files to `<vault>/.obsidian/plugins/word-cloud/`
 3. Reload Obsidian
 4. Enable the plugin in Settings → Community Plugins
 
-### Beta Installation (BRAT)
+### Beta installation (BRAT)
 1. Install the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat)
 2. Add beta repository: `https://github.com/jetrica/obsidian-word-cloud`
 3. BRAT will auto-update when new versions are released
 
 ## Usage
 
-### Creating a Word Cloud
+### Creating a word cloud
 
-#### Method 1: Command Palette
+#### Method 1: Command palette
 1. Open Command Palette (`Ctrl/Cmd + P`)
-2. Search for "Insert Word Cloud"
+2. Search for "Insert cloud"
 3. Enter your words in the modal
 4. Click "Preview" to see it live
-5. Click "Insert into Note" to add it to your document
+5. Click "Insert into note" to add it to your document
 
 ![modal insert](screens/modal.png)
 
-#### Method 2: Code Block
+#### Method 2: Code block
 Simply create a code block with the `wordcloud` language:
 
 ````markdown
@@ -66,7 +66,7 @@ innovation, creativity, design, technology, teamwork, leadership, vision, strate
 ```
 ````
 
-### Using Different Separators
+### Using different separators
 
 The plugin respects your separator setting (comma by default):
 
@@ -98,7 +98,7 @@ Access settings via: **Settings → Word Cloud**
 ![settings2](screens/settings2.png)
 
 
-### Word Separator
+### Word separator
 Choose how words are separated in your input:
 - **Comma (,)** - Default, most common
 - **Period (.)** - For sentences or special formats
@@ -113,13 +113,13 @@ AI | Machine Learning | Deep Learning | Neural Networks
 
 ---
 
-### Text Casing
+### Text casing
 Transform word casing for consistent appearance:
 
 - **As-is (keep original)** - Respects your input exactly *(default)*
-- **UPPERCASE** - ALL WORDS IN CAPITALS
-- **lowercase** - all words in lowercase
-- **Title Case** - Each Word Capitalized
+- **Uppercase** - ALL WORDS IN CAPITALS
+- **Lowercase** - all words in lowercase
+- **Title case** - Each Word Capitalized
 
 **Examples:**
 
@@ -128,11 +128,11 @@ Input: `innovation, CREATIVITY, design, TEAMWORK`
 | Setting | Output |
 |---------|--------|
 | As-is | innovation, CREATIVITY, design, TEAMWORK |
-| UPPERCASE | INNOVATION, CREATIVITY, DESIGN, TEAMWORK |
-| lowercase | innovation, creativity, design, teamwork |
-| Title Case | Innovation, Creativity, Design, Teamwork |
+| Uppercase | INNOVATION, CREATIVITY, DESIGN, TEAMWORK |
+| Lowercase | innovation, creativity, design, teamwork |
+| Title case | Innovation, Creativity, Design, Teamwork |
 
-**Smart Title Case:**
+**Smart title case:**
 - Single words: Simply capitalized (e.g., "innovation" → "Innovation")
 - Multi-word phrases: Proper title case with smart handling of small words
   - Example: "the art of design" → "The Art of Design"
@@ -141,12 +141,12 @@ Input: `innovation, CREATIVITY, design, TEAMWORK`
 
 ---
 
-### Font Size
+### Font size
 
-#### Auto Font Size (Recommended) 
+#### Auto font size (recommended) 
 Automatically adjusts font sizes based on word count:
 
-| Word Count | Font Range | Best For |
+| Word count | Font range | Best for |
 |------------|------------|----------|
 | 1-10 words | 20-56px | Big & bold for small lists |
 | 11-20 words | 16-40px | Balanced, general use |
@@ -156,7 +156,7 @@ Automatically adjusts font sizes based on word count:
 
 **Toggle off** to set manual font sizes.
 
-#### Manual Font Size
+#### Manual font size
 When auto mode is disabled, you can set:
 - **Minimum font size** (default: 12px) - Smallest words
 - **Maximum font size** (default: 48px) - Largest words
@@ -165,12 +165,12 @@ Words are randomly assigned sizes between min and max.
 
 ---
 
-### Word Spacing
+### Word spacing
 
-#### Auto Spacing (Recommended) 
+#### Auto spacing (recommended) 
 Automatically adjusts spacing based on word count:
 
-| Word Count | Spacing | Effect |
+| Word count | Spacing | Effect |
 |------------|---------|--------|
 | 1-10 words | Loose | Spread out nicely, lots of breathing room |
 | 11-20 words | Comfortable | Balanced spacing |
@@ -179,7 +179,7 @@ Automatically adjusts spacing based on word count:
 
 **Toggle off** to choose manual spacing preset.
 
-#### Manual Spacing Presets
+#### Manual spacing presets
 When auto mode is disabled, choose from:
 
 - **Compact** - Very tight spacing, maximum word density
@@ -189,16 +189,16 @@ When auto mode is disabled, choose from:
 
 ---
 
-### Color Palette
+### Color palette
 Customize the colors used for words in the cloud.
 
 **Default palette:** Blue, Orange, Pink, Purple, Green
 
 **To customize:**
 1. Click on any color to change it (color picker opens)
-2. Click **"+ Add Color"** to add more colors (up to 10 recommended)
+2. Click **"+ Add color"** to add more colors (up to 10 recommended)
 3. Click **"×"** to remove a color (minimum 1 required)
-4. Click **"Reset to Defaults"** to restore original colors
+4. Click **"Reset to defaults"** to restore original colors
 
 **Tips:**
 - Use 3-5 colors for cohesive clouds
@@ -206,7 +206,7 @@ Customize the colors used for words in the cloud.
 - Match your vault's theme colors
 - Use complementary colors for visual harmony
 
-**Color Ideas:**
+**Color ideas:**
 - **Professional:** Blues and grays
 - **Vibrant:** Rainbow spectrum
 - **Monochrome:** Different shades of one color
@@ -215,16 +215,16 @@ Customize the colors used for words in the cloud.
 
 ---
 
-## Tips & Tricks
+## Tips & tricks
 
-### Best Practices
+### Best practices
 
 **Word Count:**
 - **5-15 words** - Great for key concepts, themes, or tags
 - **20-40 words** - Ideal for brainstorming, project keywords
 - **50+ words** - Text analysis, comprehensive overviews
 
-**Use Cases:**
+**Use cases:**
 - **Meeting notes** - Key takeaways as word cloud
 - **Project planning** - Core concepts visualization
 - **Tag clouds** - Visualize your most-used tags
@@ -238,7 +238,7 @@ Customize the colors used for words in the cloud.
 - **100-200 words** - May take a few seconds to render
 - **200+ words** - Not recommended (some words may not fit)
 
-### Refreshing the Cloud
+### Refreshing the cloud
 
 Each time you:
 - Open the note
@@ -249,7 +249,7 @@ The cloud regenerates with **different random positions, sizes, and rotations** 
 
 If you click/tap on one of the cloud words, cloud will refresh with selected word focused in the center.
 
-### Mobile Usage
+### Mobile usage
 
 The plugin is fully optimized for mobile:
 - **Tap** any word to center it
@@ -258,76 +258,76 @@ The plugin is fully optimized for mobile:
 - Works in both portrait and landscape
 
 **Access on mobile:**
-- Command palette → "Insert Word Cloud"
+- Command palette → "Insert cloud"
 - No ribbon icon (Obsidian mobile limitation)
 
 ## Examples
 
-### Simple Tag Cloud
+### Simple tag cloud
 ```wordcloud
 productivity, knowledge-management, pkm, zettelkasten, writing, research, notes
 ```
 
-### Project Keywords
+### Project keywords
 ```wordcloud
 agile, sprint, retrospective, backlog, user-stories, velocity, stand-up, kanban, scrum, deployment
 ```
 
-### Book Themes
+### Book themes
 ```wordcloud
 love, betrayal, redemption, sacrifice, courage, destiny, hope, darkness, journey, transformation
 ```
 
-### Character Traits
+### Character traits
 ```wordcloud
 brave, intelligent, stubborn, loyal, mysterious, charismatic, conflicted, ambitious, compassionate
 ```
 
-### Research Topics
+### Research topics
 ```wordcloud
 machine-learning, neural-networks, deep-learning, AI, algorithms, data-science, NLP, computer-vision
 ```
 
-## Customization Examples
+## Customization examples
 
-### Professional Dark Theme
+### Professional dark theme
 Settings:
 - Colors: #2563eb, #64748b, #94a3b8
-- Casing: Title Case
+- Casing: Title case
 - Auto sizing: ON
 - Auto spacing: ON
 
-### Vibrant Rainbow
+### Vibrant rainbow
 Settings:
 - Colors: #ef4444, #f59e0b, #10b981, #3b82f6, #8b5cf6, #ec4899
-- Casing: UPPERCASE
+- Casing: Uppercase
 - Spacing: Loose
 
-### Minimalist Monochrome
+### Minimalist monochrome
 Settings:
 - Colors: #1f2937, #4b5563, #6b7280, #9ca3af
-- Casing: lowercase
+- Casing: Lowercase
 - Spacing: Comfortable
 
 ## Troubleshooting
 
-### Plugin Won't Enable
+### Plugin won't enable
 - Ensure you're running Obsidian 0.15.0 or higher
 - Check that `isDesktopOnly` is set to `false` in manifest.json
 - Try disabling other plugins to check for conflicts
 - Restart Obsidian completely
 
-### Words Not Appearing
+### Words not appearing
 - **Too many words** - Try with fewer words (under 100)
 - **Font sizes too large** - Reduce max font size or enable auto sizing
 - **Spacing too tight** - Increase spacing or enable auto spacing
 
-### Mobile Issues
+### Mobile issues
 - Update to latest Obsidian mobile version
 - Clear app cache (Settings → About → Clear cache)
 - Reinstall the plugin
 
-### Flickering on Hover (Desktop)
+### Flickering on hover (Desktop)
 - This is fixed in v1.0.0+
 - Update to latest version if experiencing this
 
