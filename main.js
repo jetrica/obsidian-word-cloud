@@ -39,10 +39,10 @@ var DEFAULT_SETTINGS = {
   casing: "as-is"
 };
 var SPACING_CONFIG = {
-  "compact": { padding: 3, margin: 5, startRadius: 1, spiralStep: 1.5 },
-  "normal": { padding: 12, margin: 12, startRadius: 5, spiralStep: 4 },
-  "comfortable": { padding: 22, margin: 18, startRadius: 12, spiralStep: 7 },
-  "loose": { padding: 35, margin: 25, startRadius: 20, spiralStep: 10 }
+  compact: { padding: 3, margin: 5, startRadius: 1, spiralStep: 1.5 },
+  normal: { padding: 12, margin: 12, startRadius: 5, spiralStep: 4 },
+  comfortable: { padding: 22, margin: 18, startRadius: 12, spiralStep: 7 },
+  loose: { padding: 35, margin: 25, startRadius: 20, spiralStep: 10 }
 };
 function getAutoSpacing(wordCount, isMobile = false) {
   if (isMobile) {
@@ -73,7 +73,23 @@ function applyCasing(text, casing) {
       if (words.length === 1) {
         return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
       } else {
-        const smallWords = ["a", "an", "and", "as", "at", "but", "by", "for", "in", "of", "on", "or", "the", "to", "with"];
+        const smallWords = [
+          "a",
+          "an",
+          "and",
+          "as",
+          "at",
+          "but",
+          "by",
+          "for",
+          "in",
+          "of",
+          "on",
+          "or",
+          "the",
+          "to",
+          "with"
+        ];
         return words.map((word, index) => {
           if (index === 0 || index === words.length - 1 || !smallWords.includes(word)) {
             return word.charAt(0).toUpperCase() + word.slice(1);
@@ -134,9 +150,13 @@ var WordCloudPlugin = class extends import_obsidian.Plugin {
     container.addClass("word-cloud-container");
     const separator = this.settings.separator || ",";
     const rawWords = source.split(separator).map((w) => w.trim()).filter((w) => w.length > 0);
-    const words = rawWords.map((word) => applyCasing(word, this.settings.casing));
+    const words = rawWords.map(
+      (word) => applyCasing(word, this.settings.casing)
+    );
     if (words.length === 0) {
-      container.createEl("p", { text: `No words provided. Add ${separator}-separated words.` });
+      container.createEl("p", {
+        text: `No words provided. Add ${separator}-separated words.`
+      });
       return;
     }
     const colors = this.settings.colorPalette.length > 0 ? this.settings.colorPalette : DEFAULT_SETTINGS.colorPalette;
@@ -176,7 +196,10 @@ var WordCloudPlugin = class extends import_obsidian.Plugin {
       let shuffledWords;
       if (centeredWord) {
         const otherWords = words.filter((w) => w !== centeredWord);
-        shuffledWords = [centeredWord, ...otherWords.sort(() => Math.random() - 0.5)];
+        shuffledWords = [
+          centeredWord,
+          ...otherWords.sort(() => Math.random() - 0.5)
+        ];
       } else {
         shuffledWords = [...words].sort(() => Math.random() - 0.5);
       }
@@ -221,7 +244,15 @@ var WordCloudPlugin = class extends import_obsidian.Plugin {
           const rotation = rotations[Math.floor(Math.random() * rotations.length)];
           const width = Math.ceil(word.length * fontSize * 0.6) + 8;
           const height = fontSize + 8;
-          tempElements.push({ width, height, fontSize, color, rotation, word, isCentered });
+          tempElements.push({
+            width,
+            height,
+            fontSize,
+            color,
+            rotation,
+            word,
+            isCentered
+          });
         });
         requestAnimationFrame(() => {
           setTimeout(() => {
@@ -241,7 +272,15 @@ var WordCloudPlugin = class extends import_obsidian.Plugin {
         const metrics = ctx.measureText(word);
         const width = Math.ceil(metrics.width) + 8;
         const height = fontSize + 8;
-        tempElements.push({ width, height, fontSize, color, rotation, word, isCentered });
+        tempElements.push({
+          width,
+          height,
+          fontSize,
+          color,
+          rotation,
+          word,
+          isCentered
+        });
       });
       requestAnimationFrame(() => {
         setTimeout(() => {
@@ -358,20 +397,29 @@ var WordCloudPlugin = class extends import_obsidian.Plugin {
             tag.addEventListener("mouseenter", () => {
               if (!isCentered) {
                 const rot = parseInt(tag.dataset.rotation || "0");
-                tag.setCssProps({ "--wc-transform": `rotate(${rot}deg) scale(1.1)`, "--wc-z-index": "100" });
+                tag.setCssProps({
+                  "--wc-transform": `rotate(${rot}deg) scale(1.1)`,
+                  "--wc-z-index": "100"
+                });
               }
             });
             tag.addEventListener("mouseleave", () => {
               if (!isCentered) {
                 const rot = parseInt(tag.dataset.rotation || "0");
-                tag.setCssProps({ "--wc-transform": `rotate(${rot}deg) scale(1)`, "--wc-z-index": "1" });
+                tag.setCssProps({
+                  "--wc-transform": `rotate(${rot}deg) scale(1)`,
+                  "--wc-z-index": "1"
+                });
               }
             });
             let touchScaleTimeout;
             tag.addEventListener("touchstart", () => {
               if (!isCentered) {
                 const rot = parseInt(tag.dataset.rotation || "0");
-                tag.setCssProps({ "--wc-transform": `rotate(${rot}deg) scale(1.1)`, "--wc-z-index": "100" });
+                tag.setCssProps({
+                  "--wc-transform": `rotate(${rot}deg) scale(1.1)`,
+                  "--wc-z-index": "100"
+                });
                 if (touchScaleTimeout)
                   window.clearTimeout(touchScaleTimeout);
               }
@@ -380,7 +428,10 @@ var WordCloudPlugin = class extends import_obsidian.Plugin {
               if (!isCentered) {
                 touchScaleTimeout = window.setTimeout(() => {
                   const rot = parseInt(tag.dataset.rotation || "0");
-                  tag.setCssProps({ "--wc-transform": `rotate(${rot}deg) scale(1)`, "--wc-z-index": "1" });
+                  tag.setCssProps({
+                    "--wc-transform": `rotate(${rot}deg) scale(1)`,
+                    "--wc-z-index": "1"
+                  });
                 }, 100);
               }
             });
@@ -417,18 +468,28 @@ var WordCloudModal = class extends import_obsidian.Modal {
       text: `Enter words separated by ${separatorName}`,
       cls: "word-cloud-modal-helper"
     });
-    const textarea = inputContainer.createEl("textarea", { cls: "word-cloud-modal-textarea" });
+    const textarea = inputContainer.createEl("textarea", {
+      cls: "word-cloud-modal-textarea"
+    });
     textarea.placeholder = `Enter ${separatorName}-separated words...`;
     const buttonContainer = contentEl.createDiv("word-cloud-modal-buttons");
-    const previewBtn = buttonContainer.createEl("button", { text: "Preview", cls: "word-cloud-modal-btn" });
+    const previewBtn = buttonContainer.createEl("button", {
+      text: "Preview",
+      cls: "word-cloud-modal-btn"
+    });
     previewBtn.addEventListener("click", () => {
-      const existing = contentEl.querySelector(".word-cloud-preview");
+      const existing = contentEl.querySelector(
+        ".word-cloud-preview"
+      );
       if (existing)
         existing.remove();
       const preview = contentEl.createDiv("word-cloud-preview");
       this.plugin.renderWordCloud(textarea.value, preview);
     });
-    const insertBtn = buttonContainer.createEl("button", { text: "Insert into note", cls: "word-cloud-modal-btn" });
+    const insertBtn = buttonContainer.createEl("button", {
+      text: "Insert into note",
+      cls: "word-cloud-modal-btn"
+    });
     insertBtn.addEventListener("click", () => {
       if (this.editor) {
         const codeBlock = "```wordcloud\n" + textarea.value + "\n```\n";
@@ -439,9 +500,14 @@ var WordCloudModal = class extends import_obsidian.Modal {
         new import_obsidian.Notice("No active editor found");
       }
     });
-    const refreshBtn = buttonContainer.createEl("button", { text: "Refresh", cls: "word-cloud-modal-btn" });
+    const refreshBtn = buttonContainer.createEl("button", {
+      text: "Refresh",
+      cls: "word-cloud-modal-btn"
+    });
     refreshBtn.addEventListener("click", () => {
-      const previewContainer = contentEl.querySelector(".word-cloud-preview");
+      const previewContainer = contentEl.querySelector(
+        ".word-cloud-preview"
+      );
       if (previewContainer) {
         previewContainer.empty();
         this.plugin.renderWordCloud(textarea.value, previewContainer);
@@ -460,64 +526,96 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    new import_obsidian.Setting(containerEl).setName("Word separator").setDesc("Character used to separate words in the cloud").addDropdown((dropdown) => dropdown.addOption(",", "Comma (,)").addOption(".", "Period (.)").addOption(" ", "Space ( )").addOption(";", "Semicolon (;)").addOption("|", "Pipe (|)").setValue(this.plugin.settings.separator).onChange(async (value) => {
-      this.plugin.settings.separator = value;
-      await this.plugin.saveSettings();
-    }));
-    new import_obsidian.Setting(containerEl).setName("Text casing").setDesc("Transform word casing for consistent appearance").addDropdown((dropdown) => dropdown.addOption("as-is", "As-is (keep original)").addOption("uppercase", "UPPERCASE").addOption("lowercase", "lowercase").addOption("title-case", "Title case").setValue(this.plugin.settings.casing).onChange(async (value) => {
-      this.plugin.settings.casing = value;
-      await this.plugin.saveSettings();
-    }));
+    new import_obsidian.Setting(containerEl).setName("Word separator").setDesc("Character used to separate words in the cloud").addDropdown(
+      (dropdown) => dropdown.addOption(",", "Comma (,)").addOption(".", "Period (.)").addOption(" ", "Space ( )").addOption(";", "Semicolon (;)").addOption("|", "Pipe (|)").setValue(this.plugin.settings.separator).onChange(async (value) => {
+        this.plugin.settings.separator = value;
+        await this.plugin.saveSettings();
+      })
+    );
+    new import_obsidian.Setting(containerEl).setName("Text casing").setDesc("Transform word casing for consistent appearance").addDropdown(
+      (dropdown) => dropdown.addOption("as-is", "As-is (keep original)").addOption("uppercase", "UPPERCASE").addOption("lowercase", "lowercase").addOption("title-case", "Title case").setValue(this.plugin.settings.casing).onChange(async (value) => {
+        this.plugin.settings.casing = value;
+        await this.plugin.saveSettings();
+      })
+    );
     new import_obsidian.Setting(containerEl).setName("Font size").setHeading();
-    new import_obsidian.Setting(containerEl).setName("Auto font size").setDesc("Automatically adjust font sizes based on word count (recommended)").addToggle((toggle) => toggle.setValue(this.plugin.settings.autoFontSize).onChange(async (value) => {
-      this.plugin.settings.autoFontSize = value;
-      await this.plugin.saveSettings();
-      this.display();
-    }));
+    new import_obsidian.Setting(containerEl).setName("Auto font size").setDesc(
+      "Automatically adjust font sizes based on word count (recommended)"
+    ).addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.autoFontSize).onChange(async (value) => {
+        this.plugin.settings.autoFontSize = value;
+        await this.plugin.saveSettings();
+        this.display();
+      })
+    );
     if (!this.plugin.settings.autoFontSize) {
-      new import_obsidian.Setting(containerEl).setName("Minimum font size").setDesc("Minimum font size in pixels").addText((text) => text.setPlaceholder("12").setValue(String(this.plugin.settings.minFontSize)).onChange(async (value) => {
-        const num = parseInt(value);
-        if (!isNaN(num) && num > 0) {
-          this.plugin.settings.minFontSize = num;
-          await this.plugin.saveSettings();
-        }
-      }));
-      new import_obsidian.Setting(containerEl).setName("Maximum font size").setDesc("Maximum font size in pixels").addText((text) => text.setPlaceholder("48").setValue(String(this.plugin.settings.maxFontSize)).onChange(async (value) => {
-        const num = parseInt(value);
-        if (!isNaN(num) && num > 0) {
-          this.plugin.settings.maxFontSize = num;
-          await this.plugin.saveSettings();
-        }
-      }));
+      new import_obsidian.Setting(containerEl).setName("Minimum font size").setDesc("Minimum font size in pixels").addText(
+        (text) => text.setPlaceholder("12").setValue(String(this.plugin.settings.minFontSize)).onChange(async (value) => {
+          const num = parseInt(value);
+          if (!isNaN(num) && num > 0) {
+            this.plugin.settings.minFontSize = num;
+            await this.plugin.saveSettings();
+          }
+        })
+      );
+      new import_obsidian.Setting(containerEl).setName("Maximum font size").setDesc("Maximum font size in pixels").addText(
+        (text) => text.setPlaceholder("48").setValue(String(this.plugin.settings.maxFontSize)).onChange(async (value) => {
+          const num = parseInt(value);
+          if (!isNaN(num) && num > 0) {
+            this.plugin.settings.maxFontSize = num;
+            await this.plugin.saveSettings();
+          }
+        })
+      );
     } else {
       const autoInfo = containerEl.createDiv("word-cloud-info-box");
-      autoInfo.createEl("div", { text: "Auto sizing rules (desktop):", cls: "word-cloud-info-title" });
+      autoInfo.createEl("div", {
+        text: "Auto sizing rules (desktop):",
+        cls: "word-cloud-info-title"
+      });
       autoInfo.createEl("div", { text: "1\u201310 words: 20\u201356 px (big and bold)" });
       autoInfo.createEl("div", { text: "11\u201320 words: 16\u201340 px (balanced)" });
       autoInfo.createEl("div", { text: "21\u201340 words: 14\u201332 px (compact)" });
       autoInfo.createEl("div", { text: "41\u201370 words: 12\u201328 px (dense)" });
       autoInfo.createEl("div", { text: "70+ words: 10\u201322 px (very dense)" });
-      autoInfo.createEl("div", { text: "On mobile, font sizes are reduced by ~40% to fit smaller screens.", cls: "word-cloud-info-note" });
+      autoInfo.createEl("div", {
+        text: "On mobile, font sizes are reduced by ~40% to fit smaller screens.",
+        cls: "word-cloud-info-note"
+      });
     }
     new import_obsidian.Setting(containerEl).setName("Word spacing").setHeading();
-    new import_obsidian.Setting(containerEl).setName("Auto spacing").setDesc("Automatically adjust spacing based on word count (recommended)").addToggle((toggle) => toggle.setValue(this.plugin.settings.autoSpacing).onChange(async (value) => {
-      this.plugin.settings.autoSpacing = value;
-      await this.plugin.saveSettings();
-      this.display();
-    }));
-    if (!this.plugin.settings.autoSpacing) {
-      new import_obsidian.Setting(containerEl).setName("Spacing preset").setDesc("Space between words. Change this and refresh your word cloud to see the difference.").addDropdown((dropdown) => dropdown.addOption("compact", "Compact \u2013 very tight").addOption("normal", "Normal \u2013 balanced").addOption("comfortable", "Comfortable \u2013 loose").addOption("loose", "Loose \u2013 very loose").setValue(this.plugin.settings.spacing).onChange(async (value) => {
-        this.plugin.settings.spacing = value;
+    new import_obsidian.Setting(containerEl).setName("Auto spacing").setDesc("Automatically adjust spacing based on word count (recommended)").addToggle(
+      (toggle) => toggle.setValue(this.plugin.settings.autoSpacing).onChange(async (value) => {
+        this.plugin.settings.autoSpacing = value;
         await this.plugin.saveSettings();
-      }));
+        this.display();
+      })
+    );
+    if (!this.plugin.settings.autoSpacing) {
+      new import_obsidian.Setting(containerEl).setName("Spacing preset").setDesc(
+        "Space between words. Change this and refresh your word cloud to see the difference."
+      ).addDropdown(
+        (dropdown) => dropdown.addOption("compact", "Compact \u2013 very tight").addOption("normal", "Normal \u2013 balanced").addOption("comfortable", "Comfortable \u2013 loose").addOption("loose", "Loose \u2013 very loose").setValue(this.plugin.settings.spacing).onChange(async (value) => {
+          this.plugin.settings.spacing = value;
+          await this.plugin.saveSettings();
+        })
+      );
     } else {
       const autoInfo = containerEl.createDiv("word-cloud-info-box");
-      autoInfo.createEl("div", { text: "Auto spacing rules (desktop):", cls: "word-cloud-info-title" });
-      autoInfo.createEl("div", { text: "1\u201310 words: Loose (spread out nicely)" });
+      autoInfo.createEl("div", {
+        text: "Auto spacing rules (desktop):",
+        cls: "word-cloud-info-title"
+      });
+      autoInfo.createEl("div", {
+        text: "1\u201310 words: Loose (spread out nicely)"
+      });
       autoInfo.createEl("div", { text: "11\u201320 words: Comfortable" });
       autoInfo.createEl("div", { text: "21\u201340 words: Normal" });
       autoInfo.createEl("div", { text: "40+ words: Compact (fit everything)" });
-      autoInfo.createEl("div", { text: "On mobile, spacing is automatically tighter to maximise word visibility.", cls: "word-cloud-info-note" });
+      autoInfo.createEl("div", {
+        text: "On mobile, spacing is automatically tighter to maximise word visibility.",
+        cls: "word-cloud-info-note"
+      });
     }
     new import_obsidian.Setting(containerEl).setName("Color palette").setHeading();
     containerEl.createEl("p", {
@@ -529,7 +627,9 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
       colorContainer.empty();
       this.plugin.settings.colorPalette.forEach((color, index) => {
         const colorItem = colorContainer.createDiv("word-cloud-palette-item");
-        const colorInput = colorItem.createEl("input", { cls: "word-cloud-palette-swatch" });
+        const colorInput = colorItem.createEl("input", {
+          cls: "word-cloud-palette-swatch"
+        });
         colorInput.type = "color";
         colorInput.value = color;
         colorInput.addEventListener("change", async (e) => {
@@ -537,9 +637,13 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
           this.plugin.settings.colorPalette[index] = target.value;
           await this.plugin.saveSettings();
         });
-        const colorLabel = colorItem.createEl("span", { cls: "word-cloud-palette-label" });
+        const colorLabel = colorItem.createEl("span", {
+          cls: "word-cloud-palette-label"
+        });
         colorLabel.textContent = color.toUpperCase();
-        const removeBtn = colorItem.createEl("button", { cls: "word-cloud-palette-remove" });
+        const removeBtn = colorItem.createEl("button", {
+          cls: "word-cloud-palette-remove"
+        });
         removeBtn.textContent = "\xD7";
         removeBtn.setAttribute("aria-label", "Remove color");
         removeBtn.addEventListener("click", async () => {
@@ -568,11 +672,15 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
       });
     };
     renderColorPalette();
-    new import_obsidian.Setting(containerEl).setName("Reset color palette").setDesc("Reset colors to the default palette").addButton((button) => button.setButtonText("Reset to defaults").onClick(async () => {
-      this.plugin.settings.colorPalette = [...DEFAULT_SETTINGS.colorPalette];
-      await this.plugin.saveSettings();
-      renderColorPalette();
-      new import_obsidian.Notice("Color palette reset to defaults");
-    }));
+    new import_obsidian.Setting(containerEl).setName("Reset color palette").setDesc("Reset colors to the default palette").addButton(
+      (button) => button.setButtonText("Reset to defaults").onClick(async () => {
+        this.plugin.settings.colorPalette = [
+          ...DEFAULT_SETTINGS.colorPalette
+        ];
+        await this.plugin.saveSettings();
+        renderColorPalette();
+        new import_obsidian.Notice("Color palette reset to defaults");
+      })
+    );
   }
 };
