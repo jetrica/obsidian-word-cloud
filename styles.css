@@ -1,27 +1,149 @@
+/* ── Word Cloud Container ─────────────────────────────────────────── */
+
 .word-cloud-container {
     position: relative;
-    min-height: 500px;
-    background: var(--background-primary);
-    border-radius: 8px;
-    padding: 20px;
-    overflow: hidden;
-    margin: 1em 0;
 }
+
+.word-cloud-sized {
+    height: var(--wc-height, 500px);
+    position: relative;
+}
+
+/* ── Word Cloud Words ─────────────────────────────────────────────── */
 
 .word-cloud-word {
     position: absolute;
     white-space: nowrap;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform 0.5s ease, z-index 0.5s ease;
     user-select: none;
+    touch-action: manipulation;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+
+    font-size: var(--wc-font-size, 16px);
+    color: var(--wc-color, currentColor);
+    left: var(--wc-left, 0);
+    top: var(--wc-top, 0);
+    transform: var(--wc-transform, none);
+    transform-origin: center center;
+    z-index: var(--wc-z-index, 1);
 }
 
-.word-cloud-word:hover {
-    z-index: 100 !important;
+.word-cloud-word--centered {
+    font-weight: 900;
+    z-index: 50;
+    transform-origin: center center;
 }
 
-/* Modal styling */
-.modal .preview-container {
-    min-height: 500px;
+/* ── Modal ────────────────────────────────────────────────────────── */
+
+.word-cloud-modal-input {
+    margin-bottom: 20px;
+}
+
+.word-cloud-modal-helper {
+    font-size: 0.9em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.word-cloud-modal-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px; /* prevents zoom on iOS */
+    box-sizing: border-box;
+}
+
+.word-cloud-modal-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.word-cloud-modal-btn {
+    flex: 1;
+    min-width: 80px;
+}
+
+.word-cloud-preview {
+    margin-top: 20px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+/* ── Settings Tab ─────────────────────────────────────────────────── */
+
+.word-cloud-info-box {
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: var(--background-secondary);
+    border-radius: 4px;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+.word-cloud-info-title {
+    font-weight: bold;
+}
+
+.word-cloud-info-note {
+    font-style: italic;
+}
+
+.word-cloud-palette-desc {
+    font-size: 0.9em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.word-cloud-palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.word-cloud-palette-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+}
+
+.word-cloud-palette-swatch {
+    width: 50px;
+    height: 30px;
+    border: none;
+    cursor: pointer;
+}
+
+.word-cloud-palette-label {
+    font-size: 0.9em;
+    font-family: monospace;
+    min-width: 70px;
+}
+
+.word-cloud-palette-remove {
+    padding: 2px 8px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.word-cloud-palette-remove--disabled {
+    opacity: 0.3;
+}
+
+.word-cloud-palette-add {
+    padding: 5px 15px;
+    cursor: pointer;
 }
