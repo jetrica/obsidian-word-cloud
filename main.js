@@ -134,8 +134,8 @@ var WordCloudPlugin = class extends import_obsidian.Plugin {
       new WordCloudModal(this.app, this).open();
     });
     this.addCommand({
-      id: "insert-word-cloud",
-      name: "Insert word cloud",
+      id: "insert-cloud",
+      name: "Insert cloud",
       editorCallback: (editor, view) => {
         new WordCloudModal(this.app, this, editor).open();
       }
@@ -261,6 +261,7 @@ var WordCloudPlugin = class extends import_obsidian.Plugin {
         });
         return;
       }
+      const context = ctx;
       shuffledWords.forEach((word) => {
         const isCentered = centeredWord === word;
         const fontSize = isCentered ? Math.floor((maxFontSize + minFontSize) / 2 + 10) : Math.floor(Math.random() * (maxFontSize - minFontSize + 1)) + minFontSize;
@@ -268,8 +269,8 @@ var WordCloudPlugin = class extends import_obsidian.Plugin {
         const rotations = isCentered ? [0] : [0, 0, 0, 0, 90, -90];
         const rotation = rotations[Math.floor(Math.random() * rotations.length)];
         const fontFamily = container.isConnected ? getComputedStyle(container).fontFamily || "Arial, sans-serif" : "Arial, sans-serif";
-        ctx.font = `bold ${fontSize}px ${fontFamily}`;
-        const metrics = ctx.measureText(word);
+        context.font = `bold ${fontSize}px ${fontFamily}`;
+        const metrics = context.measureText(word);
         const width = Math.ceil(metrics.width) + 8;
         const height = fontSize + 8;
         tempElements.push({
@@ -481,7 +482,7 @@ var WordCloudModal = class extends import_obsidian.Modal {
       const existing = contentEl.querySelector(
         ".word-cloud-preview"
       );
-      if (existing)
+      if (existing instanceof HTMLElement)
         existing.remove();
       const preview = contentEl.createDiv("word-cloud-preview");
       this.plugin.renderWordCloud(textarea.value, preview);
@@ -508,7 +509,7 @@ var WordCloudModal = class extends import_obsidian.Modal {
       const previewContainer = contentEl.querySelector(
         ".word-cloud-preview"
       );
-      if (previewContainer) {
+      if (previewContainer instanceof HTMLElement) {
         previewContainer.empty();
         this.plugin.renderWordCloud(textarea.value, previewContainer);
       }
@@ -533,7 +534,7 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
       })
     );
     new import_obsidian.Setting(containerEl).setName("Text casing").setDesc("Transform word casing for consistent appearance").addDropdown(
-      (dropdown) => dropdown.addOption("as-is", "As-is (keep original)").addOption("uppercase", "UPPERCASE").addOption("lowercase", "lowercase").addOption("title-case", "Title case").setValue(this.plugin.settings.casing).onChange(async (value) => {
+      (dropdown) => dropdown.addOption("as-is", "As-is (keep original)").addOption("uppercase", "Uppercase").addOption("lowercase", "Lowercase").addOption("title-case", "Title case").setValue(this.plugin.settings.casing).onChange(async (value) => {
         this.plugin.settings.casing = value;
         await this.plugin.saveSettings();
       })
@@ -607,11 +608,11 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
         cls: "word-cloud-info-title"
       });
       autoInfo.createEl("div", {
-        text: "1\u201310 words: Loose (spread out nicely)"
+        text: "1\u201310 words: loose (spread out nicely)"
       });
-      autoInfo.createEl("div", { text: "11\u201320 words: Comfortable" });
-      autoInfo.createEl("div", { text: "21\u201340 words: Normal" });
-      autoInfo.createEl("div", { text: "40+ words: Compact (fit everything)" });
+      autoInfo.createEl("div", { text: "11\u201320 words: comfortable" });
+      autoInfo.createEl("div", { text: "21\u201340 words: normal" });
+      autoInfo.createEl("div", { text: "40+ words: compact (fit everything)" });
       autoInfo.createEl("div", {
         text: "On mobile, spacing is automatically tighter to maximise word visibility.",
         cls: "word-cloud-info-note"
@@ -632,10 +633,10 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
         });
         colorInput.type = "color";
         colorInput.value = color;
-        colorInput.addEventListener("change", async (e) => {
+        colorInput.addEventListener("change", (e) => {
           const target = e.target;
           this.plugin.settings.colorPalette[index] = target.value;
-          await this.plugin.saveSettings();
+          this.plugin.saveSettings();
         });
         const colorLabel = colorItem.createEl("span", {
           cls: "word-cloud-palette-label"
@@ -646,10 +647,10 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
         });
         removeBtn.textContent = "\xD7";
         removeBtn.setAttribute("aria-label", "Remove color");
-        removeBtn.addEventListener("click", async () => {
+        removeBtn.addEventListener("click", () => {
           if (this.plugin.settings.colorPalette.length > 1) {
             this.plugin.settings.colorPalette.splice(index, 1);
-            await this.plugin.saveSettings();
+            this.plugin.saveSettings();
             renderColorPalette();
           } else {
             new import_obsidian.Notice("You must have at least one color in the palette");
@@ -664,10 +665,10 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
         text: "Add color",
         cls: "word-cloud-palette-add"
       });
-      addColorBtn.addEventListener("click", async () => {
+      addColorBtn.addEventListener("click", () => {
         const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0");
         this.plugin.settings.colorPalette.push(randomColor);
-        await this.plugin.saveSettings();
+        this.plugin.saveSettings();
         renderColorPalette();
       });
     };

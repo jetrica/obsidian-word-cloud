@@ -157,8 +157,8 @@ export default class WordCloudPlugin extends Plugin {
     });
 
     this.addCommand({
-      id: "insert-word-cloud",
-      name: "Insert word cloud",
+      id: "insert-cloud",
+      name: "Insert cloud",
       editorCallback: (editor: Editor, view: MarkdownView) => {
         new WordCloudModal(this.app, this, editor).open();
       },
@@ -326,6 +326,8 @@ export default class WordCloudPlugin extends Plugin {
         return;
       }
 
+      const context: CanvasRenderingContext2D = ctx;
+
       shuffledWords.forEach((word) => {
         const isCentered = centeredWord === word;
         const fontSize = isCentered
@@ -342,9 +344,9 @@ export default class WordCloudPlugin extends Plugin {
           ? getComputedStyle(container).fontFamily || "Arial, sans-serif"
           : "Arial, sans-serif";
         (
-          ctx as CanvasRenderingContext2D
+          context
         ).font = `bold ${fontSize}px ${fontFamily}`;
-        const metrics = (ctx as CanvasRenderingContext2D).measureText(word);
+        const metrics = context.measureText(word);
         const width = Math.ceil(metrics.width) + 8;
         const height = fontSize + 8;
 
@@ -614,8 +616,8 @@ class WordCloudModal extends Modal {
     previewBtn.addEventListener("click", () => {
       const existing = contentEl.querySelector(
         ".word-cloud-preview"
-      ) as HTMLElement | null;
-      if (existing) existing.remove();
+      );
+      if (existing instanceof HTMLElement) existing.remove();
       const preview = contentEl.createDiv("word-cloud-preview");
       this.plugin.renderWordCloud(textarea.value, preview);
     });
@@ -642,8 +644,8 @@ class WordCloudModal extends Modal {
     refreshBtn.addEventListener("click", () => {
       const previewContainer = contentEl.querySelector(
         ".word-cloud-preview"
-      ) as HTMLElement | null;
-      if (previewContainer) {
+      );
+      if (previewContainer instanceof HTMLElement) {
         previewContainer.empty();
         this.plugin.renderWordCloud(textarea.value, previewContainer);
       }
@@ -691,8 +693,8 @@ class WordCloudSettingTab extends PluginSettingTab {
       .addDropdown((dropdown) =>
         dropdown
           .addOption("as-is", "As-is (keep original)")
-          .addOption("uppercase", "UPPERCASE")
-          .addOption("lowercase", "lowercase")
+          .addOption("uppercase", "Uppercase")
+          .addOption("lowercase", "Lowercase")
           .addOption("title-case", "Title case")
           .setValue(this.plugin.settings.casing)
           .onChange(async (value) => {
@@ -817,11 +819,11 @@ class WordCloudSettingTab extends PluginSettingTab {
         cls: "word-cloud-info-title",
       });
       autoInfo.createEl("div", {
-        text: "1–10 words: Loose (spread out nicely)",
+        text: "1–10 words: loose (spread out nicely)",
       });
-      autoInfo.createEl("div", { text: "11–20 words: Comfortable" });
-      autoInfo.createEl("div", { text: "21–40 words: Normal" });
-      autoInfo.createEl("div", { text: "40+ words: Compact (fit everything)" });
+      autoInfo.createEl("div", { text: "11–20 words: comfortable" });
+      autoInfo.createEl("div", { text: "21–40 words: normal" });
+      autoInfo.createEl("div", { text: "40+ words: compact (fit everything)" });
       autoInfo.createEl("div", {
         text: "On mobile, spacing is automatically tighter to maximise word visibility.",
         cls: "word-cloud-info-note",
@@ -850,10 +852,10 @@ class WordCloudSettingTab extends PluginSettingTab {
         colorInput.type = "color";
         colorInput.value = color;
 
-        colorInput.addEventListener("change", async (e) => {
+        colorInput.addEventListener("change", (e) => {
           const target = e.target as HTMLInputElement;
           this.plugin.settings.colorPalette[index] = target.value;
-          await this.plugin.saveSettings();
+          this.plugin.saveSettings();
         });
 
         const colorLabel = colorItem.createEl("span", {
@@ -867,10 +869,10 @@ class WordCloudSettingTab extends PluginSettingTab {
         removeBtn.textContent = "×";
         removeBtn.setAttribute("aria-label", "Remove color");
 
-        removeBtn.addEventListener("click", async () => {
+        removeBtn.addEventListener("click", () => {
           if (this.plugin.settings.colorPalette.length > 1) {
             this.plugin.settings.colorPalette.splice(index, 1);
-            await this.plugin.saveSettings();
+            this.plugin.saveSettings();
             renderColorPalette();
           } else {
             new Notice("You must have at least one color in the palette");
@@ -888,14 +890,14 @@ class WordCloudSettingTab extends PluginSettingTab {
         cls: "word-cloud-palette-add",
       });
 
-      addColorBtn.addEventListener("click", async () => {
+      addColorBtn.addEventListener("click", () => {
         const randomColor =
           "#" +
           Math.floor(Math.random() * 16777215)
             .toString(16)
             .padStart(6, "0");
         this.plugin.settings.colorPalette.push(randomColor);
-        await this.plugin.saveSettings();
+        this.plugin.saveSettings();
         renderColorPalette();
       });
     };
