@@ -636,7 +636,7 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
         colorInput.addEventListener("change", (e) => {
           const target = e.target;
           this.plugin.settings.colorPalette[index] = target.value;
-          this.plugin.saveSettings();
+          void this.plugin.saveSettings();
         });
         const colorLabel = colorItem.createEl("span", {
           cls: "word-cloud-palette-label"
@@ -650,7 +650,7 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
         removeBtn.addEventListener("click", () => {
           if (this.plugin.settings.colorPalette.length > 1) {
             this.plugin.settings.colorPalette.splice(index, 1);
-            this.plugin.saveSettings();
+            void this.plugin.saveSettings();
             renderColorPalette();
           } else {
             new import_obsidian.Notice("You must have at least one color in the palette");
@@ -668,7 +668,7 @@ var WordCloudSettingTab = class extends import_obsidian.PluginSettingTab {
       addColorBtn.addEventListener("click", () => {
         const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0");
         this.plugin.settings.colorPalette.push(randomColor);
-        this.plugin.saveSettings();
+        void this.plugin.saveSettings();
         renderColorPalette();
       });
     };
