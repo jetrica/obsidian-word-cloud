@@ -855,7 +855,7 @@ class WordCloudSettingTab extends PluginSettingTab {
         colorInput.addEventListener("change", (e) => {
           const target = e.target as HTMLInputElement;
           this.plugin.settings.colorPalette[index] = target.value;
-          this.plugin.saveSettings();
+          void this.plugin.saveSettings();
         });
 
         const colorLabel = colorItem.createEl("span", {
@@ -872,7 +872,7 @@ class WordCloudSettingTab extends PluginSettingTab {
         removeBtn.addEventListener("click", () => {
           if (this.plugin.settings.colorPalette.length > 1) {
             this.plugin.settings.colorPalette.splice(index, 1);
-            this.plugin.saveSettings();
+            void this.plugin.saveSettings();
             renderColorPalette();
           } else {
             new Notice("You must have at least one color in the palette");
@@ -897,7 +897,7 @@ class WordCloudSettingTab extends PluginSettingTab {
             .toString(16)
             .padStart(6, "0");
         this.plugin.settings.colorPalette.push(randomColor);
-        this.plugin.saveSettings();
+        void this.plugin.saveSettings();
         renderColorPalette();
       });
     };
