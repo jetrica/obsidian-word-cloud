@@ -31,8 +31,7 @@ Whether you're brainstorming story ideas, organizing research themes, or explori
 
 ## Installation
 
-Installation
-Install Map View from the Obsidian Community Plugins store: search for "Word Cloud" and click Install.
+Install Word Cloud plugin from the Obsidian Community Plugins store: search for "Word Cloud" and click Install.
 
 ## Usage
 
