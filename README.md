@@ -31,18 +31,8 @@ Whether you're brainstorming story ideas, organizing research themes, or explori
 
 ## Installation
 
-Plugin is submitted and waiting for approval, but you can try it:
-
-### Manual installation
-1. Download the latest release from [GitHub releases](https://github.com/jetrica/obsidian-word-cloud/releases)
-2. Extract the files to `<vault>/.obsidian/plugins/word-cloud/`
-3. Reload Obsidian
-4. Enable the plugin in Settings → Community Plugins
-
-### Beta installation (BRAT)
-1. Install the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat)
-2. Add beta repository: `https://github.com/jetrica/obsidian-word-cloud`
-3. BRAT will auto-update when new versions are released
+Installation
+Install Map View from the Obsidian Community Plugins store: search for "Word Cloud" and click Install.
 
 ## Usage
 
